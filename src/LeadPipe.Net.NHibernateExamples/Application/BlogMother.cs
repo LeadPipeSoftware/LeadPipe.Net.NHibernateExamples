@@ -22,31 +22,16 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 
 		    for (var i = 0; i < numberOfPosts; i++)
 		    {
-                var postWithComments = CreatePostWithComments(numberOfCommentsPerPost);
+                blog.AddPost(RandomValueProvider.RandomString(25, true));
+		    }
 
-                blog.Posts.Add(postWithComments);
+		    foreach (var post in blog.Posts)
+		    {
+		        post.AddComment(RandomValueProvider.RandomString(10, true), RandomValueProvider.LoremIpsum(20));
 		    }
 
 		    return blog;
 
 		}
-
-        /// <summary>
-        /// Creates a post with comments.
-        /// </summary>
-        /// <returns>A new post with comments.</returns>
-	    public static Post CreatePostWithComments(int numberOfComments = 15)
-	    {
-            var post = new Post(RandomValueProvider.RandomString(25, true));
-
-	        for (var i = 0; i < numberOfComments; i++)
-	        {
-                var comment = new Comment(RandomValueProvider.RandomString(10, false), RandomValueProvider.LoremIpsum(10));
-
-                post.Comments.Add(comment);
-	        }
-            
-            return post;
-	    }
 	}
 }

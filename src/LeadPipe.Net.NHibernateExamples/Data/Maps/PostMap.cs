@@ -22,28 +22,40 @@ namespace LeadPipe.Net.NHibernateExamples.Data.Maps
 		/// </summary>
 		public PostMap()
 		{
-			this.Id(x => x.Sid, m => m.Generator(Generators.HighLow));
+			this.Id(post => post.Sid, map => map.Generator(Generators.HighLow));
 
-			this.Property(x => x.Key, m => m.Access(Accessor.ReadOnly));
+			this.Property(post => post.Key, map =>
+			{
+			    map.Access(Accessor.ReadOnly);
+                map.Column("DomainKey");
+			});
 
-			this.Property(x => x.Title);
+			this.Property(post => post.Title);
 
-            this.ManyToOne(x => x.Blog, m =>
+            this.Property(post => post.CommentsEnabled);
+
+            this.ManyToOne(post => post.Blog, map =>
             {
-                m.Cascade(Cascade.DeleteOrphans);
-                m.NotNullable(false);
-                m.Fetch(FetchKind.Join);
+                map.Cascade(Cascade.DeleteOrphans);
+                map.NotNullable(true);
+                map.Fetch(FetchKind.Join);
+                map.Class(typeof(Blog));
             });
 
-            this.Bag(x => x.Comments, c =>
+            this.Bag(post => post.Comments, bag =>
             {
-                c.Cascade(Cascade.All);
-                c.Lazy(CollectionLazy.NoLazy);
-                c.Inverse(true);                  // SEE BELOW
-            }
-                , r =>
+                bag.Cascade(Cascade.All);
+                bag.Access(Accessor.Field);
+                bag.Key(k =>
                 {
-                    r.OneToMany();
+                    k.NotNullable(true);
+                });
+                bag.Lazy(CollectionLazy.NoLazy);
+                bag.Inverse(true);                  // SEE BELOW
+            }
+                , relation =>
+                {
+                    relation.OneToMany();
                 }
                 );
 

@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Text.RegularExpressions;
 using LeadPipe.Net.Domain;
 
 namespace LeadPipe.Net.NHibernateExamples.Domain
@@ -19,11 +20,13 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="Comment" /> class.
         /// </summary>
-        /// <param name="user">The user.</param>
+        /// <param name="post">The post.</param>
+        /// <param name="commenter">The Commenter.</param>
         /// <param name="text">The comment text.</param>
-		public Comment(string user, string text)
-		{
-			this.User = user;
+		public Comment(Post post, string commenter, string text)
+        {
+            this.Post = post;
+			this.Commenter = commenter;
             this.Text = text;
 		}
 
@@ -38,6 +41,30 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 
 		#region Public Properties
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the comment has been approved by a moderator.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the comment has been approved by moderator; otherwise, <c>false</c>.
+        /// </value>
+        public virtual bool ApprovedByModerator { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the comment text contains restricted language.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the comment contains restricted language; otherwise, <c>false</c>.
+        /// </value>
+	    public virtual bool ContainsRestrictedLanguage
+	    {
+	        get
+	        {
+                var r = new Regex("competitor|poopoo|republican");
+                
+                return r.IsMatch(this.Text);
+	        }
+	    }
+
 		/// <summary>
 		/// Gets the entity key.
 		/// </summary>
@@ -45,7 +72,7 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 		{
 			get
 			{
-				return this.User + DateTime.UtcNow.ToLongDateString();
+				return this.Commenter + DateTime.UtcNow.ToLongDateString();
 			}
 		}
 
@@ -66,9 +93,9 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
         public virtual string Text { get; protected set; }
 
 		/// <summary>
-		/// Gets or sets user.
+		/// Gets or sets the commenter.
 		/// </summary>
-		public virtual string User { get; protected set; }
+		public virtual string Commenter { get; protected set; }
 
 		#endregion
 	}

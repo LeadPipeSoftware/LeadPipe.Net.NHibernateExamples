@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FirstExample.cs" company="Lead Pipe Software">
+// <copyright file="DealingWithNPlusOne.cs" company="Lead Pipe Software">
 //   Copyright (c) Lead Pipe Software All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using LeadPipe.Net.Data;
 using LeadPipe.Net.Data.NHibernate;
+using LeadPipe.Net.Extensions;
 using LeadPipe.Net.NHibernateExamples.Domain;
 using NHibernate.Linq;
 using NUnit.Framework;
@@ -16,17 +17,17 @@ using StructureMap;
 namespace LeadPipe.Net.NHibernateExamples.Application
 {
 	/// <summary>
-	/// The first set of examples.
+	/// Demonstrates an N+1 and shows ways to deal with them.
 	/// </summary>
 	[TestFixture]
-	public class FirstExample
+	public class DealingWithNPlusOne
 	{
 	    private readonly DataCommandProvider dataCommandProvider;
 	    private readonly IUnitOfWorkFactory unitOfWorkFactory;
 	    
         private string blogName;
 
-        public FirstExample()
+        public DealingWithNPlusOne()
 	    {
             Bootstrapper.Start();
 
@@ -45,11 +46,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
             {
                 var blog = BlogMother.CreateBlogWithPostsAndComments(blogName);
 
-                //this.dataCommandProvider.Session.SetBatchSize(blog.Posts.Count);
-
                 this.dataCommandProvider.Save(blog);
-
-                //this.dataCommandProvider.Session.SetBatchSize(0);
 
                 unitOfWork.Commit();
             }
@@ -61,20 +58,32 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 		[Test]
 		public void NPlusOne()
 		{
-            var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();           
+            var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();
 
-			// Assert
+            /*
+             * Note that the LeadPipe.Net.Data.NHibernate.UnitOfWork implementation provides a
+             * transaction during the call to .Start by default. As such, there's no reason for us
+             * to concern ourselves with it here. However, if you're using a raw ISession then you
+             * absolutely SHOULD create a transaction even if you're only reading and not altering
+             * data in any way.
+             * 
+             * For more information see:
+             * 
+             * http://ayende.com/blog/3775/nh-prof-alerts-use-of-implicit-transactions-is-discouraged
+             */
+
+            // Assert
 			using (unitOfWork.Start())
 			{
 			    var blog = this.dataCommandProvider.Session
                     .Query<Blog>()
                     .FirstOrDefault(x => x.Name == this.blogName);
 
-			    foreach (var post in blog.Posts)
+                foreach (var post in blog.Posts)
 			    {
 			        foreach (var comment in post.Comments)
 			        {
-			            Console.WriteLine(comment.Text);
+			            Console.WriteLine("{0} said {1}".FormattedWith(comment.Commenter, comment.Text));
 			        }
 			    }
 
@@ -103,7 +112,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
                 {
                     foreach (var comment in post.Comments)
                     {
-                        Console.WriteLine(comment.Text);
+                        Console.WriteLine("{0} said {1}".FormattedWith(comment.Commenter, comment.Text));
                     }
                 }
 
@@ -131,14 +140,15 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 
                 /*
                  * As of v4, NHibernate doesn't let you use ThenFetchMany when you have multiple
-                 * bag maps with a fetch type of JOIN. Cue the sad trombone noise.
+                 * bag maps with a fetch type of JOIN. Cue the sad trombone noise. There are ways
+                 * to deal with this, however, that's out of scope for this demonstration.
                  */
 
                 foreach (var post in blog.Posts)
                 {
                     foreach (var comment in post.Comments)
                     {
-                        Console.WriteLine(comment.Text);
+                        Console.WriteLine("{0} said {1}".FormattedWith(comment.Commenter, comment.Text));
                     }
                 }
 
@@ -176,13 +186,15 @@ namespace LeadPipe.Net.NHibernateExamples.Application
                     .FetchMany(p => p.Comments)
                     .ToFuture();
 
-                var blog = query.FirstOrDefault();
+                var blog = query.FirstOrDefault(); // Set a breakpoint here so you can see that no
+                                                   // SQL is actually issued until this line is
+                                                   // executed.
 
                 foreach (var post in blog.Posts)
                 {
                     foreach (var comment in post.Comments)
                     {
-                        Console.WriteLine(comment.Text);
+                        Console.WriteLine("{0} said {1}".FormattedWith(comment.Commenter, comment.Text));
                     }
                 }
 

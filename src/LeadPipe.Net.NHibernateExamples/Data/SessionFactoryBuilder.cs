@@ -24,12 +24,12 @@ namespace LeadPipe.Net.NHibernateExamples.Data
 	{
 		#region Constants and Fields
 
-		/// <summary>
+        /// <summary>
 		/// The NHibernate map document name.
 		/// </summary>
 		private const string MapDocumentName = "NHibernateMap";
 
-		/// <summary>
+        /// <summary>
 		/// The session factory.
 		/// </summary>
 		private ISessionFactory sessionFactory;
@@ -61,12 +61,14 @@ namespace LeadPipe.Net.NHibernateExamples.Data
 			}
 
 			this.Configuration = this.Configure();
+
 			var mapping = this.Map();
-			this.Configuration.AddDeserializedMapping(mapping, MapDocumentName);
+			
+            this.Configuration.AddDeserializedMapping(mapping, MapDocumentName);
+
+            this.BuildSchema();
 			
 			this.sessionFactory = this.Configuration.BuildSessionFactory();
-
-			new SchemaExport(this.Configuration).Create(false, true);
 
 			return this.sessionFactory;
 		}
@@ -74,6 +76,14 @@ namespace LeadPipe.Net.NHibernateExamples.Data
 		#endregion
 
 		#region Methods
+
+        /// <summary>
+        /// Builds the schema.
+        /// </summary>
+        private void BuildSchema()
+        {
+            new SchemaExport(this.Configuration).Execute(false, true, false);
+        }
 
 		/// <summary>
 		/// Configures NHibernate.
@@ -88,11 +98,11 @@ namespace LeadPipe.Net.NHibernateExamples.Data
 			configuration.DataBaseIntegration(
 				db =>
 				{
-				    db.BatchSize = 10; // Sadly, there's no batching provider for SQLite
-					db.Driver<SQLite20Driver>();
-					db.ConnectionString = "Data Source=:memory:;Version=3;New=True;Pooling=True;Max Pool Size=1";
-					db.Dialect<SQLiteDialect>();
-					db.ConnectionReleaseMode = ConnectionReleaseMode.OnClose;					    
+                    db.Driver<Sql2008ClientDriver>();
+                    db.ConnectionString = "Server=ZIRCON;Database=NHibernateExample;Trusted_Connection=True;";
+					db.Dialect<MsSql2008Dialect>();
+					db.ConnectionReleaseMode = ConnectionReleaseMode.OnClose;
+                    ////db.BatchSize = 20; // MAGIC!
 				});            
 
             HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();

@@ -22,17 +22,24 @@ namespace LeadPipe.Net.NHibernateExamples.Data.Maps
 		/// </summary>
 		public CommentMap()
 		{
-			this.Id(x => x.Sid, m => m.Generator(Generators.HighLow));
+			this.Id(comment => comment.Sid, map => map.Generator(Generators.HighLow));
 
-			this.Property(x => x.Key, m => m.Access(Accessor.ReadOnly));
+			this.Property(comment => comment.Key, map =>
+			{
+			    map.Access(Accessor.ReadOnly);
+			    map.Column("DomainKey");
+			});
 
-			this.Property(x => x.User);
+			this.Property(comment => comment.Commenter);
 
-            this.ManyToOne(x => x.Post, m =>
+            this.Property(comment => comment.ApprovedByModerator);
+
+            this.ManyToOne(comment => comment.Post, map =>
             {
-                m.Cascade(Cascade.DeleteOrphans);
-                m.NotNullable(false);
-                m.Fetch(FetchKind.Join);
+                map.Cascade(Cascade.DeleteOrphans);
+                map.NotNullable(true);
+                map.Fetch(FetchKind.Join);
+                map.Class(typeof(Post));
             });
 		}
 

@@ -22,20 +22,31 @@ namespace LeadPipe.Net.NHibernateExamples.Data.Maps
 		/// </summary>
 		public BlogMap()
 		{
-			this.Id(x => x.Sid, m => m.Generator(Generators.HighLow));
+			this.Id(blog => blog.Sid, map => map.Generator(Generators.HighLow));
 
-			this.Property(x => x.Key, m => m.Access(Accessor.ReadOnly));
+			this.Property(blog => blog.Key, map =>
+			{
+			    map.Access(Accessor.ReadOnly);
+                map.Column("DomainKey");
+			});
 
-			this.Property(x => x.Name);
+			this.Property(blog => blog.Name);
 
-            this.Bag(x => x.Posts, c =>
+            this.Property(blog => blog.IsActive);
+
+            this.Bag(x => x.Posts, bag =>
             {
-                c.Cascade(Cascade.All);
-                c.Inverse(true);                  // SEE BELOW
-            }
-                , r =>
+                bag.Cascade(Cascade.All);
+                bag.Access(Accessor.Field);
+                bag.Key(k =>
                 {
-                    r.OneToMany();
+                    k.NotNullable(true);
+                });
+                bag.Inverse(true);                  // SEE BELOW
+            }
+                , relation =>
+                {
+                    relation.OneToMany();
                 }
                 );
 

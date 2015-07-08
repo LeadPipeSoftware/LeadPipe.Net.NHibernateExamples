@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using LeadPipe.Net.Domain;
 
 namespace LeadPipe.Net.NHibernateExamples.Domain
@@ -14,7 +15,9 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 	/// </summary>
 	public class Blog : PersistableObject<int>, IEntity
 	{
-		#region Constructors and Destructors
+	    private readonly IList<Post> posts;
+
+	    #region Constructors and Destructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Blog"/> class.
@@ -25,7 +28,7 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 		public Blog(string name)
 		{
 			this.Name = name;
-			this.Posts = new List<Post>();
+			this.posts = new List<Post>();
 		}
 
 		/// <summary>
@@ -39,7 +42,15 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 
 		#region Public Properties
 
-		/// <summary>
+        /// <summary>
+        /// Gets or sets a value indicating whether this blog is active.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this blog is active; otherwise, <c>false</c>.
+        /// </value>
+        public virtual bool IsActive { get; set; }
+        
+        /// <summary>
 		/// Gets the entity key.
 		/// </summary>
 		public virtual string Key
@@ -55,14 +66,28 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 		/// </summary>
 		public virtual string Name { get; protected set; }
 
-		/// <summary>
-		/// Gets or sets the posts.
-		/// </summary>
-		public virtual IList<Post> Posts { get; protected set; }
+	    /// <summary>
+	    /// Gets the blog posts.
+	    /// </summary>
+	    public virtual IEnumerable<Post> Posts
+	    {
+	        get { return posts; }
+	    }
 
-		#endregion
+	    #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Adds a new blog post.
+        /// </summary>
+        /// <param name="title">The post title.</param>
+	    public virtual void AddPost(string title)
+	    {
+	        var post = new Post(this, title);
+
+            this.posts.Add(post);
+	    }
 
         /// <summary>
         /// Prints the post comments.

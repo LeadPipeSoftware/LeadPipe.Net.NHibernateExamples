@@ -1,9 +1,10 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlogSpecifications.cs" company="Lead Pipe Software">
+// <copyright file="CommentSpecifications.cs" company="Lead Pipe Software">
 //   Copyright (c) Lead Pipe Software All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
 using LeadPipe.Net.Specifications;
 
 namespace LeadPipe.Net.NHibernateExamples.Domain
@@ -13,61 +14,60 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 	/// </summary>
 	public static class BlogSpecifications
 	{
-		#region Public Methods and Operators
-
 		/// <summary>
-		/// The test property starts with abc.
+		/// The blog has posts.
 		/// </summary>
 		/// <returns>
-		/// Test Models that start with ABC.
+		/// True if the blog has posts.
 		/// </returns>
-		public static ISpecification<Blog> TestPropertyStartsWithABC()
+		public static ISpecification<Blog> HasPosts()
 		{
-			return new AdHocSpecification<Blog>(x => x.Name.StartsWith("ABC"));
+			return new AdHocSpecification<Blog>(blog => blog.Posts.Any());
 		}
 
         /// <summary>
-        /// The test property ends with xyz.
+        /// Determines whether the blog has posts with comments enabled.
         /// </summary>
-        /// <returns>
-        /// Test Models that end with XYZ.
-        /// </returns>
-	    public static ISpecification<Blog> TestPropertyEndsWithXYZ()
-	    {
-	        return new AdHocSpecification<Blog>(x => x.Name.EndsWith("XYZ"));
-	    }
-
-        /// <summary>
-        /// The test property starts with abc and ends with xyz.
-        /// </summary>
-        /// <returns>
-        /// Test Models that start with ABC and end with XYZ.
-        /// </returns>
-	    public static ISpecification<Blog> TestPropertyStartsWithABCAndEndsWithXYZ()
-	    {
-	        return new AndSpecification<Blog>(TestPropertyStartsWithABC(), TestPropertyEndsWithXYZ());
-	    }
-
-        /// <summary>
-        /// The test property starts with abc or ends with xyz.
-        /// </summary>
-        /// <returns>
-        /// Test Models that start with ABC or end with XYZ.
-        /// </returns>
-        public static ISpecification<Blog> TestPropertyStartsWithABCOrEndsWithXYZ()
+        /// <returns>True if the blog has posts with comments enabled.</returns>
+        public static ISpecification<Blog> HasPostsWithCommentsEnabled()
         {
-            return new OrSpecification<Blog>(TestPropertyStartsWithABC(), TestPropertyEndsWithXYZ());
+            return new AdHocSpecification<Blog>(blog => blog.Posts.Any(post => post.CommentsEnabled));
         }
 
         /// <summary>
-        /// The test property does NOT start with abc or ends with xyz.
+        /// Determines whether the blog is active.
         /// </summary>
-        /// <returns></returns>
-        public static ISpecification<Blog> NotTestPropertyStartsWithABCOrEndsWithXYZ()
+        /// <returns>True if the blog is active.</returns>
+        public static ISpecification<Blog> IsActive()
         {
-            return new NotSpecification<Blog>(TestPropertyStartsWithABC());
+            return new AdHocSpecification<Blog>(blog => blog.IsActive);
         }
 
-		#endregion
+        /// <summary>
+        /// Determines whether the blog is active and has posts.
+        /// </summary>
+        /// <returns>True if the blog is active and has posts.</returns>
+	    public static ISpecification<Blog> IsActiveAndHasPosts()
+	    {
+	        return new AndSpecification<Blog>(HasPosts(), IsActive());
+	    }
+
+        /// <summary>
+        /// Determines whether the blog is active or has posts.
+        /// </summary>
+        /// <returns>True if the blog is active or has posts.</returns>
+        public static ISpecification<Blog> IsActiveOrHasPosts()
+        {
+            return new OrSpecification<Blog>(HasPosts(), IsActive());
+        }
+
+        /// <summary>
+        /// Determines whether the blog is not active.
+        /// </summary>
+        /// <returns>True if the blog is not active.</returns>
+        public static ISpecification<Blog> IsNotActive()
+        {
+            return new NotSpecification<Blog>(IsActive());
+        }
 	}
 }
