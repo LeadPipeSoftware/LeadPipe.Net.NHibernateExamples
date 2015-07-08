@@ -34,6 +34,8 @@ namespace LeadPipe.Net.NHibernateExamples.Data.Maps
 
             this.Property(comment => comment.ApprovedByModerator);
 
+            this.Property(comment => comment.Text);
+
             this.ManyToOne(comment => comment.Post, map =>
             {
                 map.Cascade(Cascade.DeleteOrphans);

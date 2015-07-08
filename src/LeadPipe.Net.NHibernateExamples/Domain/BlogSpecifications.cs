@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommentSpecifications.cs" company="Lead Pipe Software">
+// <copyright file="PostSpecifications.cs" company="Lead Pipe Software">
 //   Copyright (c) Lead Pipe Software All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------

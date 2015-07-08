@@ -29,6 +29,7 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 		{
 			this.Name = name;
 			this.posts = new List<Post>();
+		    this.IsActive = true;
 		}
 
 		/// <summary>

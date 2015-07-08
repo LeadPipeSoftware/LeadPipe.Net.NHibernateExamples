@@ -126,6 +126,7 @@
     <Compile Include="Data\SessionFactoryBuilder.cs" />
     <Compile Include="Domain\Blog.cs" />
     <Compile Include="Domain\BlogQueries.cs" />
+    <Compile Include="Domain\PostSpecifications.cs" />
     <Compile Include="Domain\CommentSpecifications.cs" />
     <Compile Include="Domain\BlogSpecifications.cs" />
     <Compile Include="Domain\Comment.cs" />

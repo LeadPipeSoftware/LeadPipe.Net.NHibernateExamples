@@ -38,6 +38,7 @@ namespace LeadPipe.Net.NHibernateExamples.Data.Maps
             {
                 bag.Cascade(Cascade.All);
                 bag.Access(Accessor.Field);
+                bag.Fetch(CollectionFetchMode.Join);
                 bag.Key(k =>
                 {
                     k.NotNullable(true);

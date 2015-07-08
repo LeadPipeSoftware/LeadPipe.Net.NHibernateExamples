@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Linq;
 using LeadPipe.Net.Specifications;
 
 namespace LeadPipe.Net.NHibernateExamples.Domain
