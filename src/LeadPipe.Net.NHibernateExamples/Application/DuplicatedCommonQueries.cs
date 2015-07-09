@@ -63,12 +63,8 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         /// Demonstrates commonly duplicated queries.
         /// </summary>
         [Test]
-        public void DuplicatedQueries()
+        public void Problem()
         {
-            /*
-             * This code demonstrates the "before" code.
-             */
-
             var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();
 
             using (unitOfWork.Start())
@@ -93,7 +89,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         }
 
         /// <summary>
-        /// Demonstrates how to use a Query Object.
+        /// Demonstrates how to use a Query Object to avoid query duplication.
         /// </summary>
         [Test]
         public void UsingQueryObjects()

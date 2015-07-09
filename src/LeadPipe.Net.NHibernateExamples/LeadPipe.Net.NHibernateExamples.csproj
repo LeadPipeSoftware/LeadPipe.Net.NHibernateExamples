@@ -116,11 +116,13 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Application\BlogMother.cs" />
-    <Compile Include="Application\DealingWithDuplicatedBusinessRules.cs" />
-    <Compile Include="Application\DealingWithDuplicatedQueries.cs" />
-    <Compile Include="Application\DealingWithAnemicDomains.cs" />
-    <Compile Include="Application\DealingWithMultipleInserts.cs" />
-    <Compile Include="Application\DealingWithMultipleSessions.cs" />
+    <Compile Include="Application\DuplicatedBusinessRules.cs" />
+    <Compile Include="Application\DuplicatedCommonQueries.cs" />
+    <Compile Include="Application\AnemicDomainModel.cs" />
+    <Compile Include="Application\LargeNumberOfIndividualWrites.cs" />
+    <Compile Include="Application\UnboundedResultSet.cs" />
+    <Compile Include="Application\TransactionDisposedWithoutExplicitRollbackCommit.cs" />
+    <Compile Include="Application\MoreThanOneSessionPerRequest.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Data\Maps\BlogMap.cs" />
     <Compile Include="Data\Maps\CommentMap.cs" />
@@ -134,7 +136,7 @@
     <Compile Include="Domain\Comment.cs" />
     <Compile Include="Domain\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Application\DealingWithNPlusOne.cs" />
+    <Compile Include="Application\SelectNPlusOne.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

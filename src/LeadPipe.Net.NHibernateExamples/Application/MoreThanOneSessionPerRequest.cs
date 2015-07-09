@@ -61,7 +61,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         /// Demonstrates calling other methods that use Units of Work from outside an existing scope.
         /// </summary>
         [Test]
-        public void CallingOutsideUnitOfWorkScope()
+        public void Problem()
         {
             /*
              * A Unit of Work is intended to be a business transaction. Unfortunately, it's common
@@ -205,7 +205,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 
                 Console.WriteLine("The blog has {0} posts.".FormattedWith(blog.Posts.Count()));
 
-                unitOfWork.Commit();
+                //unitOfWork.Commit();
             }
         }
     }

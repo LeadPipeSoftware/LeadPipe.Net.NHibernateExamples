@@ -61,12 +61,8 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         /// Demonstrates domains without specifications.
         /// </summary>
         [Test]
-        public void WithoutSpecifications()
+        public void Problem()
         {
-            /*
-             * This code demonstrates the "before" code.
-             */
-
             var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();
 
             using (unitOfWork.Start())

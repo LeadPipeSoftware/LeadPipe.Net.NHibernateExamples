@@ -77,12 +77,8 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         /// Demonstrates stolen behavior.
         /// </summary>
         [Test]
-        public void StolenBehavior()
+        public void Problem()
         {
-            /*
-             * This example demonstrates stolen domain behavior.
-             */
-
             var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();
 
             using (unitOfWork.Start())

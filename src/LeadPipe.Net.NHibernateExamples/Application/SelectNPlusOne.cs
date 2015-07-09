@@ -17,7 +17,7 @@ using StructureMap;
 namespace LeadPipe.Net.NHibernateExamples.Application
 {
 	/// <summary>
-	/// Demonstrates an N+1 and shows ways to deal with them.
+	/// Demonstrates the Select N+1 alert and how to deal with them.
 	/// </summary>
 	[TestFixture]
 	public class SelectNPlusOne
@@ -65,18 +65,6 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 	    {
             this.blogName = RandomValueProvider.RandomString(25, true);
             
-            /* 
-             * Note that the LeadPipe.Net.Data.NHibernate.UnitOfWork implementation provides a
-             * transaction during the call to .Start by default. As such, there's no reason for us
-             * to concern ourselves with it here. However, if you're using a raw ISession then you
-             * absolutely SHOULD create a transaction even if you're only reading and not altering
-             * data in any way.
-             * 
-             * For more information see:
-             * 
-             * http://ayende.com/blog/3775/nh-prof-alerts-use-of-implicit-transactions-is-discouraged
-             */
-
             var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork();
 
 	        using (unitOfWork.Start())
@@ -93,12 +81,8 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 		/// Demonstrates an N+1 problem.
 		/// </summary>
 		[Test]
-		public void NPlusOne()
+		public void Problem()
 		{
-            /*
-             * This example demonstrates a classic N+1 problem.
-             */
-
             var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();
 
             using (unitOfWork.Start())
@@ -120,7 +104,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 		}
 
         /// <summary>
-        /// Demonstrates using FetchMany.
+        /// Demonstrates using FetchMany to reduce N+1 problems.
         /// </summary>
         [Test]
         public void UsingFetchMany()
@@ -162,7 +146,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         }
 
         /// <summary>
-        /// Demonstrates using ThenFetchMany.
+        /// Demonstrates using ThenFetchMany to reduce N+1 problems.
         /// </summary>
         [Test]
         public void UsingThenFetchMany()
@@ -199,7 +183,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         }
         
         /// <summary>
-        /// Demonstrates using ToFuture.
+        /// Demonstrates using ToFuture to solve N+1 problems.
         /// </summary>
         [Test]
         public void UsingToFuture()
