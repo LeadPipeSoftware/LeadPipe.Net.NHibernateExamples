@@ -46,20 +46,20 @@
     <Reference Include="HibernatingRhinos.Profiler.Appender">
       <HintPath>..\..\lib\NHibernateProfiler\HibernatingRhinos.Profiler.Appender.dll</HintPath>
     </Reference>
-    <Reference Include="LeadPipe.Net, Version=1.0.5666.24644, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\LeadPipe.Net.1.0.5666.24644\lib\net45\LeadPipe.Net.dll</HintPath>
+    <Reference Include="LeadPipe.Net, Version=1.0.5668.23942, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\LeadPipe.Net.1.0.5668.23942\lib\net45\LeadPipe.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LeadPipe.Net.Data, Version=1.0.5666.24645, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\LeadPipe.Net.Data.1.0.5666.24645\lib\net45\LeadPipe.Net.Data.dll</HintPath>
+    <Reference Include="LeadPipe.Net.Data, Version=1.0.5668.23943, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\LeadPipe.Net.Data.1.0.5668.23943\lib\net45\LeadPipe.Net.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LeadPipe.Net.Data.NHibernate, Version=1.0.5666.24646, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\LeadPipe.Net.Data.NHibernate.1.0.5666.24646\lib\net45\LeadPipe.Net.Data.NHibernate.dll</HintPath>
+    <Reference Include="LeadPipe.Net.Data.NHibernate, Version=1.0.5668.23944, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\LeadPipe.Net.Data.NHibernate.1.0.5668.23944\lib\net45\LeadPipe.Net.Data.NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LeadPipe.Net.Domain, Version=1.0.5666.24644, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\LeadPipe.Net.Domain.1.0.5666.24644\lib\net45\LeadPipe.Net.Domain.dll</HintPath>
+    <Reference Include="LeadPipe.Net.Domain, Version=1.0.5668.23942, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\LeadPipe.Net.Domain.1.0.5668.23942\lib\net45\LeadPipe.Net.Domain.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
@@ -119,6 +119,8 @@
     <Compile Include="Application\DealingWithDuplicatedBusinessRules.cs" />
     <Compile Include="Application\DealingWithDuplicatedQueries.cs" />
     <Compile Include="Application\DealingWithAnemicDomains.cs" />
+    <Compile Include="Application\DealingWithMultipleInserts.cs" />
+    <Compile Include="Application\DealingWithMultipleSessions.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Data\Maps\BlogMap.cs" />
     <Compile Include="Data\Maps\CommentMap.cs" />

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DealingWithDuplicatedBusinessRules.cs" company="Lead Pipe Software">
+// <copyright file="DuplicatedCommonQueries.cs" company="Lead Pipe Software">
 //   Copyright (c) Lead Pipe Software All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -20,14 +20,21 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 	/// Demonstrates dealing with duplicated queries using query objects.
 	/// </summary>
 	[TestFixture]
-	public class DealingWithDuplicatedQueries
+	public class DuplicatedCommonQueries
 	{
-	    private readonly DataCommandProvider dataCommandProvider;
+        /*
+         * All too often we see the same query issued over and over again and, unfortunately,
+         * this duplication leads to subtle differences. Not only does that present some risk,
+         * but it also makes it a real pain to make changes. For example, when an optimization
+         * is implemented how do you find each place in your code to change?
+         */
+	    
+        private readonly DataCommandProvider dataCommandProvider;
 	    private readonly IUnitOfWorkFactory unitOfWorkFactory;
 	    
         private string blogName;
 
-        public DealingWithDuplicatedQueries()
+        public DuplicatedCommonQueries()
 	    {
             Bootstrapper.Start();
 
@@ -59,10 +66,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         public void DuplicatedQueries()
         {
             /*
-             * All too often we see the same query issued over and over again and, unfortunately,
-             * this duplication leads to subtle differences. Not only does that present some risk,
-             * but it also makes it a real pain to make changes. For example, when an optimization
-             * is implemented how do you find each place in your code to change?
+             * This code demonstrates the "before" code.
              */
 
             var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();

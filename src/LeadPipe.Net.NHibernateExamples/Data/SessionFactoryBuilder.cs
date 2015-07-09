@@ -102,7 +102,7 @@ namespace LeadPipe.Net.NHibernateExamples.Data
                     db.ConnectionString = "Server=ZIRCON;Database=NHibernateExample;Trusted_Connection=True;";
 					db.Dialect<MsSql2008Dialect>();
 					db.ConnectionReleaseMode = ConnectionReleaseMode.OnClose;
-                    db.BatchSize = 0; // Comment out this line to enabled batching on SQL Server
+                    //db.BatchSize = 0; // Comment out this line to enabled batching on SQL Server
 				});            
 
             HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();

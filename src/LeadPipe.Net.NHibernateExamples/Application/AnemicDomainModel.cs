@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DealingWithAnemicDomains.cs" company="Lead Pipe Software">
+// <copyright file="AnemicDomainModel.cs" company="Lead Pipe Software">
 //   Copyright (c) Lead Pipe Software All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -20,14 +20,35 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 	/// Demonstrates anemic domains and how to deal with them.
 	/// </summary>
 	[TestFixture]
-	public class DealingWithAnemicDomains
+	public class AnemicDomainModel
 	{
+        /*
+         * A common anti-pattern in Domain Driven Design is what we call an anemic domain model
+         * and it's most frequently seen when behavior that could be accomplished by the domain
+         * is pulled out into a service, controller, or some other type. By itself, an anemic
+         * domain is problematic because it makes determining what should be going on much
+         * harder and it scatters business rules all over the place. There's often a hidden
+         * cost associated with anemic domains when it comes to an O/RM, however.
+         * 
+         * When a domain is fragmented and behavior is stolen by types that are outside of the
+         * domain we'll often see lots of individual methods that start sessions, perform some
+         * work, and closes the session. This completely wrecks the first level identity map
+         * (sometimes called the first level cache) because the map is lost when the session is
+         * disposed.
+         * 
+         * "Wait!", you say, "My implementation makes sure that the current session is returned
+         * when a session is asked for!" Sure, that may be true, but when does the session get
+         * DISPOSED of? Yeah, see that's the problem. The "give me the current session" trick
+         * will only work if nobody disposes of the session. Otherwise, you'll be getting a new
+         * session each and every time.
+         */
+
 	    private readonly DataCommandProvider dataCommandProvider;
 	    private readonly IUnitOfWorkFactory unitOfWorkFactory;
 	    
         private string blogName;
 
-        public DealingWithAnemicDomains()
+        public AnemicDomainModel()
 	    {
             Bootstrapper.Start();
 
@@ -59,24 +80,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         public void StolenBehavior()
         {
             /*
-             * A common anti-pattern in Domain Driven Design is what we call an anemic domain model
-             * and it's most frequently seen when behavior that could be accomplished by the domain
-             * is pulled out into a service, controller, or some other type. By itself, an anemic
-             * domain is problematic because it makes determining what should be going on much
-             * harder and it scatters business rules all over the place. There's often a hidden
-             * cost associated with anemic domains when it comes to an O/RM, however.
-             * 
-             * When a domain is fragmented and behavior is stolen by types that are outside of the
-             * domain we'll often see lots of individual methods that start sessions, perform some
-             * work, and closes the session. This completely wrecks the first level identity map
-             * (sometimes called the first level cache) because the map is lost when the session is
-             * disposed.
-             * 
-             * "Wait!", you say, "My implementation makes sure that the current session is returned
-             * when a session is asked for!" Sure, that may be true, but when does the session get
-             * DISPOSED of? Yeah, see that's the problem. The "give me the current session" trick
-             * will only work if nobody disposes of the session. Otherwise, you'll be getting a new
-             * session each and every time.
+             * This example demonstrates stolen domain behavior.
              */
 
             var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();

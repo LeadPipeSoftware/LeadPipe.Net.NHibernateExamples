@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DealingWithDuplicatedBusinessRules.cs" company="Lead Pipe Software">
+// <copyright file="DuplicatedBusinessRules.cs" company="Lead Pipe Software">
 //   Copyright (c) Lead Pipe Software All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -18,14 +18,21 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 	/// Demonstrates dealing with duplicated business rules with specifications.
 	/// </summary>
 	[TestFixture]
-	public class DealingWithDuplicatedBusinessRules
+	public class DuplicatedBusinessRules
 	{
+        /*
+         * Let's start with a common pattern. Our business has said that only active blogs will
+         * have printable comments. In other words, if the blog is not active then no comments
+         * will ever be displayed. We're going to query for all the blogs and then enumerate
+         * them looking for the ones that meet that business rule.
+         */
+
 	    private readonly DataCommandProvider dataCommandProvider;
 	    private readonly IUnitOfWorkFactory unitOfWorkFactory;
 	    
         private string blogName;
 
-        public DealingWithDuplicatedBusinessRules()
+        public DuplicatedBusinessRules()
 	    {
             Bootstrapper.Start();
 
@@ -57,10 +64,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         public void WithoutSpecifications()
         {
             /*
-             * Let's start with a common pattern. Our business has said that only active blogs will
-             * have printable comments. In other words, if the blog is not active then no comments
-             * will ever be displayed. We're going to query for all the blogs and then enumerate
-             * them looking for the ones that meet that business rule.
+             * This code demonstrates the "before" code.
              */
 
             var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();
