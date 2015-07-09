@@ -123,8 +123,19 @@ namespace LeadPipe.Net.NHibernateExamples.Data
 			mapper.AddMapping<BlogMap>();
 			mapper.AddMapping<PostMap>();
             mapper.AddMapping<CommentMap>();
+            mapper.AddMapping<FooMap>();
+            mapper.AddMapping<BarMap>();
+		    mapper.AddMapping<FooBarMap>();
 
-			var mapping = mapper.CompileMappingFor(new[] { typeof(Blog), typeof(Post), typeof(Comment) });
+			var mapping = mapper.CompileMappingFor(new[]
+			{
+			    typeof(Blog),
+                typeof(Post),
+                typeof(Comment),
+                typeof(Foo),
+                typeof(Bar),
+                typeof(FooBar)
+			});
 
 			return mapping;
 		}

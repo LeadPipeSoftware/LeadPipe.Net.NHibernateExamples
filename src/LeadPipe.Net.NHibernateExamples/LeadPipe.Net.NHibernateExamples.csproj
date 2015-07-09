@@ -115,19 +115,27 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Application\FooBarMother.cs" />
     <Compile Include="Application\BlogMother.cs" />
     <Compile Include="Application\DuplicatedBusinessRules.cs" />
     <Compile Include="Application\DuplicatedCommonQueries.cs" />
     <Compile Include="Application\AnemicDomainModel.cs" />
     <Compile Include="Application\LargeNumberOfIndividualWrites.cs" />
+    <Compile Include="Application\CompositeDatabaseKeys.cs" />
     <Compile Include="Application\UnboundedResultSet.cs" />
     <Compile Include="Application\TransactionDisposedWithoutExplicitRollbackCommit.cs" />
     <Compile Include="Application\MoreThanOneSessionPerRequest.cs" />
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Data\Maps\BarMap.cs" />
+    <Compile Include="Data\Maps\FooBarMap.cs" />
+    <Compile Include="Data\Maps\FooMap.cs" />
     <Compile Include="Data\Maps\BlogMap.cs" />
     <Compile Include="Data\Maps\CommentMap.cs" />
     <Compile Include="Data\Maps\PostMap.cs" />
     <Compile Include="Data\SessionFactoryBuilder.cs" />
+    <Compile Include="Domain\Bar.cs" />
+    <Compile Include="Domain\FooBar.cs" />
+    <Compile Include="Domain\Foo.cs" />
     <Compile Include="Domain\Blog.cs" />
     <Compile Include="Domain\BlogQueries.cs" />
     <Compile Include="Domain\PostSpecifications.cs" />
@@ -142,7 +150,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Data\CreateCompositeExampleTables.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\System.Data.SQLite.Core.1.0.97.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\..\packages\System.Data.SQLite.Core.1.0.97.0\build\net45\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
