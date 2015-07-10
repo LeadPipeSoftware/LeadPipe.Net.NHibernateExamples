@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using LeadPipe.Net.Domain;
 
 namespace LeadPipe.Net.NHibernateExamples.Domain
@@ -11,8 +12,10 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 	/// <summary>
 	/// The Foo.
 	/// </summary>
-	public class Foo : PersistableObject<int>, IEntity
+	public class Foo : PersistableObject<Guid>, IEntity
 	{
+	    private string domainId;
+
 	    #region Constructors and Destructors
 
 		/// <summary>
@@ -38,15 +41,23 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 		#region Public Properties
 
         /// <summary>
-		/// Gets the entity key.
-		/// </summary>
-		public virtual string Key
-		{
-			get
-			{
-				return this.Name;
-			}
-		}
+        /// Gets or sets the key.
+        /// </summary>
+        /// <value>
+        /// The key.
+        /// </value>
+        public virtual string Key
+        {
+            get
+            {
+                return this.Name;
+            }
+
+            set
+            {
+                this.domainId = value;
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets the name.

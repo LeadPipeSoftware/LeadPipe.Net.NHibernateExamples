@@ -13,8 +13,10 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 	/// <summary>
 	/// A blog post comment.
 	/// </summary>
-	public class Comment : PersistableObject<int>, IEntity
+	public class Comment : PersistableObject<Guid>, IEntity
 	{
+	    private string domainId;
+
 		#region Constructors and Destructors
 
         /// <summary>
@@ -65,16 +67,24 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 	        }
 	    }
 
-		/// <summary>
-		/// Gets the entity key.
-		/// </summary>
-		public virtual string Key
-		{
-			get
-			{
-				return this.Commenter + DateTime.UtcNow.ToLongDateString();
-			}
-		}
+        /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        /// <value>
+        /// The key.
+        /// </value>
+        public virtual string Key
+        {
+            get
+            {
+                return this.Commenter + DateTime.UtcNow.ToLongDateString();
+            }
+
+            set
+            {
+                this.domainId = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the comment's post.

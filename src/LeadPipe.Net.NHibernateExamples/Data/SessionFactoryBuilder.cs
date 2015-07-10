@@ -4,142 +4,69 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using FluentNHibernate.Cfg;
+using FluentNHibernate.Cfg.Db;
+using HibernatingRhinos.Profiler.Appender.NHibernate;
 using LeadPipe.Net.Data.NHibernate;
-using LeadPipe.Net.NHibernateExamples.Data.Maps;
 using LeadPipe.Net.NHibernateExamples.Domain;
 using NHibernate;
-using NHibernate.Cfg;
-using NHibernate.Cfg.MappingSchema;
-using NHibernate.Dialect;
-using NHibernate.Driver;
-using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
 
 namespace LeadPipe.Net.NHibernateExamples.Data
 {
-	/// <summary>
-	/// The session factory builder.
-	/// </summary>
-	public class SessionFactoryBuilder : ISessionFactoryBuilder
-	{
-		#region Constants and Fields
+    /// <summary>
+    /// The session factory builder.
+    /// </summary>
+    public class SessionFactoryBuilder : ISessionFactoryBuilder
+    {
+        #region Public Properties
 
         /// <summary>
-		/// The NHibernate map document name.
-		/// </summary>
-		private const string MapDocumentName = "NHibernateMap";
-
-        /// <summary>
-		/// The session factory.
-		/// </summary>
-		private ISessionFactory sessionFactory;
-
-		#endregion
-
-		#region Public Properties
-
-		/// <summary>
-		/// Gets or sets the configuration.
-		/// </summary>
-		public global::NHibernate.Cfg.Configuration Configuration { get; protected set; }
-
-		#endregion
-
-		#region Public Methods and Operators
-
-		/// <summary>
-		/// Builds a configured session factory.
-		/// </summary>
-		/// <returns>
-		/// The configured session factory.
-		/// </returns>
-		public ISessionFactory Build()
-		{
-			if (this.sessionFactory != null)
-			{
-				return this.sessionFactory;
-			}
-
-			this.Configuration = this.Configure();
-
-			var mapping = this.Map();
-			
-            this.Configuration.AddDeserializedMapping(mapping, MapDocumentName);
-
-            this.BuildSchema();
-			
-			this.sessionFactory = this.Configuration.BuildSessionFactory();
-
-			return this.sessionFactory;
-		}
-
-		#endregion
-
-		#region Methods
-
-        /// <summary>
-        /// Builds the schema.
+        /// Gets the configuration.
         /// </summary>
-        private void BuildSchema()
+        /// <value>
+        /// The configuration.
+        /// </value>
+        public NHibernate.Cfg.Configuration Configuration { get; private set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// Builds an NHibernate session factory instance.
+        /// </summary>
+        /// <returns>
+        /// An NHibernate session factory.
+        /// </returns>
+        /// <exception cref="Exception">An error occurred while configuring the database connection.</exception>
+        public ISessionFactory Build()
         {
-            new SchemaExport(this.Configuration).Execute(false, true, false);
+            ISessionFactory sessionFactory = null;
+
+            try
+            {
+                sessionFactory = Fluently.Configure()
+                    .Database(MsSqlConfiguration.MsSql2008.ConnectionString("Server=ZIRCON;Database=NHibernateExample;Trusted_Connection=True;"))
+                    .Mappings(m => { m.FluentMappings.AddFromAssemblyOf<Blog>(); })
+                    .ExposeConfiguration(config =>
+                    {
+                        Configuration = config;
+                        new SchemaExport(config).Execute(true, true, false);
+                    })
+                    .Diagnostics(d => d.Enable()).BuildSessionFactory();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while configuring the database connection.", ex);
+            }
+
+            NHibernateProfiler.Initialize();
+
+            return sessionFactory;
         }
 
-		/// <summary>
-		/// Configures NHibernate.
-		/// </summary>
-		/// <returns>
-		/// The NHibernate configuration.
-		/// </returns>
-		private global::NHibernate.Cfg.Configuration Configure()
-		{
-			var configuration = new global::NHibernate.Cfg.Configuration();
-
-			configuration.DataBaseIntegration(
-				db =>
-				{
-                    db.Driver<Sql2008ClientDriver>();
-                    db.ConnectionString = "Server=ZIRCON;Database=NHibernateExample;Trusted_Connection=True;";
-					db.Dialect<MsSql2008Dialect>();
-					db.ConnectionReleaseMode = ConnectionReleaseMode.OnClose;
-                    //db.BatchSize = 0; // Comment out this line to enabled batching on SQL Server
-				});            
-
-            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
-
-			return configuration;
-		}
-
-		/// <summary>
-		/// Gets the NHibernate mapping.
-		/// </summary>
-		/// <returns>
-		/// The NHibernate mapping.
-		/// </returns>
-		private HbmMapping Map()
-		{
-			var mapper = new ModelMapper();
-
-			mapper.AddMapping<BlogMap>();
-			mapper.AddMapping<PostMap>();
-            mapper.AddMapping<CommentMap>();
-            mapper.AddMapping<FooMap>();
-            mapper.AddMapping<BarMap>();
-		    mapper.AddMapping<FooBarMap>();
-
-			var mapping = mapper.CompileMappingFor(new[]
-			{
-			    typeof(Blog),
-                typeof(Post),
-                typeof(Comment),
-                typeof(Foo),
-                typeof(Bar),
-                typeof(FooBar)
-			});
-
-			return mapping;
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

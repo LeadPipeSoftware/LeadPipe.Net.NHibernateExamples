@@ -15,9 +15,10 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 	/// <summary>
 	/// A blog post.
 	/// </summary>
-	public class Post : PersistableObject<int>, IEntity
+	public class Post : PersistableObject<Guid>, IEntity
 	{
 	    private readonly IList<Comment> comments;
+	    private string domainId;
 
 	    #region Constructors and Destructors
 
@@ -61,16 +62,24 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
         /// </value>
         public virtual bool CommentsEnabled { get; set; }
 
-		/// <summary>
-		/// Gets the entity key.
-		/// </summary>
-		public virtual string Key
-		{
-			get
-			{
-				return this.Title;
-			}
-		}
+        /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        /// <value>
+        /// The key.
+        /// </value>
+        public virtual string Key
+        {
+            get
+            {
+                return this.Title;
+            }
+
+            set
+            {
+                this.domainId = value;
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets the title.

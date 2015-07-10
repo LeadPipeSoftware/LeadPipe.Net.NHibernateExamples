@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using LeadPipe.Net.Domain;
 
 namespace LeadPipe.Net.NHibernateExamples.Domain
@@ -11,8 +12,10 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 	/// <summary>
 	/// The FooBar.
 	/// </summary>
-	public class FooBar : PersistableObject<int>, IEntity
+	public class FooBar : PersistableObject<Guid>, IEntity
 	{
+	    private string domainId;
+
 	    #region Constructors and Destructors
 
         /// <summary>
@@ -23,9 +26,6 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
         /// <param name="name">The name.</param>
 		public FooBar(Foo foo, Bar bar, string name)
         {
-            this.FooId = foo.Sid;
-            this.BarId = bar.Sid;
-            
             this.Foo = foo;
             this.Bar = bar;
 			this.Name = name;
@@ -40,28 +40,12 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 	    public virtual Bar Bar { get; set; }
 
         /// <summary>
-        /// Gets or sets the bar identifier.
-        /// </summary>
-        /// <value>
-        /// The bar identifier.
-        /// </value>
-        public virtual int BarId { get; protected set; }
-
-        /// <summary>
         /// Gets or sets the foo.
         /// </summary>
         /// <value>
         /// The foo.
         /// </value>
 	    public virtual Foo Foo { get; set; }
-
-        /// <summary>
-        /// Gets or sets the foo identifier.
-        /// </summary>
-        /// <value>
-        /// The foo identifier.
-        /// </value>
-        public virtual int FooId { get; protected set; }
 
 	    /// <summary>
 		/// Initializes a new instance of the <see cref="FooBar"/> class.
@@ -75,15 +59,23 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 		#region Public Properties
 
         /// <summary>
-		/// Gets the entity key.
-		/// </summary>
-		public virtual string Key
-		{
-			get
-			{
-				return this.Name;
-			}
-		}
+        /// Gets or sets the key.
+        /// </summary>
+        /// <value>
+        /// The key.
+        /// </value>
+        public virtual string Key
+        {
+            get
+            {
+                return this.Name;
+            }
+
+            set
+            {
+                this.domainId = value;
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets the name.

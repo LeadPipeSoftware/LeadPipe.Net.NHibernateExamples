@@ -4,47 +4,59 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using FluentNHibernate.Mapping;
+using LeadPipe.Net.Data;
 using LeadPipe.Net.NHibernateExamples.Domain;
-using NHibernate.Mapping.ByCode;
-using NHibernate.Mapping.ByCode.Conformist;
 
 namespace LeadPipe.Net.NHibernateExamples.Data.Maps
 {
-	/// <summary>
-	/// The Comment NHibernate map.
-	/// </summary>
-	public class CommentMap : ClassMapping<Comment>
-	{
-		#region Constructors and Destructors
+    /// <summary>
+    /// The Comment NHibernate map.
+    /// </summary>
+    public class CommentMap : ClassMap<Comment>, IUseSchema
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommentMap"/> class.
+        /// </summary>
+        public CommentMap()
+        {
+            // Set the schema name...
+            this.Schema(this.SchemaName);
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CommentMap"/> class.
-		/// </summary>
-		public CommentMap()
-		{
-			this.Id(comment => comment.Sid, map => map.Generator(Generators.HighLow));
+            // Set the surrogate id field...
+            this.Id(x => x.Sid).GeneratedBy.GuidComb();
 
-			this.Property(comment => comment.Key, map =>
-			{
-			    map.Access(Accessor.ReadOnly);
-			    map.Column("DomainKey");
-			});
+            // Use optimistic locking based on version...
+            this.OptimisticLock.Version();
 
-			this.Property(comment => comment.Commenter);
+            // Map the IPersistable fields...
+            this.Version(x => x.PersistenceVersion).Column("Ver");
 
-            this.Property(comment => comment.ApprovedByModerator);
+            ////// Map the IChangeAudited fields...
+            ////this.Map(x => x.CreatedBy);
+            ////this.Map(x => x.CreatedOn);
+            ////this.Map(x => x.UpdatedBy);
+            ////this.Map(x => x.UpdatedOn);
 
-            this.Property(comment => comment.Text);
+            // Map the class fields...
+            this.Map(x => x.Key).Column("DomainId");
+            this.Map(x => x.Commenter);
+            this.Map(x => x.ApprovedByModerator);
+            this.Map(x => x.Text);
 
-            this.ManyToOne(comment => comment.Post, map =>
+            // Map the references...
+            this.References(x => x.Post);
+        }
+
+        /// <summary>
+        /// Gets the name of the schema.
+        /// </summary>
+        public string SchemaName
+        {
+            get
             {
-                map.Cascade(Cascade.DeleteOrphans);
-                map.NotNullable(true);
-                map.Fetch(FetchKind.Join);
-                map.Class(typeof(Post));
-            });
-		}
-
-		#endregion
-	}
+                return "dbo";
+            }
+        }
+    }
 }

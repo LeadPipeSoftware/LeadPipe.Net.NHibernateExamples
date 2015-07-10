@@ -4,8 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using LeadPipe.Net.Domain;
 
 namespace LeadPipe.Net.NHibernateExamples.Domain
@@ -13,9 +13,10 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 	/// <summary>
 	/// The blog.
 	/// </summary>
-	public class Blog : PersistableObject<int>, IEntity
+	public class Blog : PersistableObject<Guid>, IEntity
 	{
-	    private readonly IList<Post> posts;
+        private readonly IList<Post> posts;
+	    private string domainId;
 
 	    #region Constructors and Destructors
 
@@ -50,17 +51,25 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
         ///   <c>true</c> if this blog is active; otherwise, <c>false</c>.
         /// </value>
         public virtual bool IsActive { get; set; }
-        
+
         /// <summary>
-		/// Gets the entity key.
-		/// </summary>
-		public virtual string Key
-		{
-			get
-			{
-				return this.Name;
-			}
-		}
+        /// Gets or sets the key.
+        /// </summary>
+        /// <value>
+        /// The key.
+        /// </value>
+        public virtual string Key
+        {
+            get
+            {
+                return this.Name;
+            }
+
+            set
+            {
+                this.domainId = value;
+            }
+        }
 
 		/// <summary>
 		/// Gets or sets the blog name.

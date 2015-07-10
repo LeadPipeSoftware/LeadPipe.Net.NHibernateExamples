@@ -4,32 +4,55 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using FluentNHibernate.Mapping;
+using LeadPipe.Net.Data;
 using LeadPipe.Net.NHibernateExamples.Domain;
-using NHibernate.Mapping.ByCode.Conformist;
 
 namespace LeadPipe.Net.NHibernateExamples.Data.Maps
 {
-	/// <summary>
-	/// The FooBar NHibernate map.
-	/// </summary>
-	public class FooBarMap : ClassMapping<FooBar>
-	{
-		#region Constructors and Destructors
+    public class FooBarMap : ClassMap<FooBar>, IUseSchema
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FooBarMap"/> class.
+        /// </summary>
+        public FooBarMap()
+        {
+            // Set the schema name...
+            this.Schema(this.SchemaName);
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FooBarMap"/> class.
-		/// </summary>
-		public FooBarMap()
-		{
-            this.ComposedId(m =>
-            {
-                m.Property(x => x.FooId, p => p.Column("FooId"));
-                m.Property(x => x.BarId, p => p.Column("BarId"));
-            });
+            // Set the composite id...
+            this.CompositeId()
+                .KeyReference(x => x.Foo)
+                .KeyReference(x => x.Bar);
 
-			this.Property(fooBar => fooBar.Name);
+            // Set the natural id...
+            this.NaturalId().Property(x => x.Name);
+
+            // Use optimistic locking based on version...
+            this.OptimisticLock.Version();
+
+            // Map the IPersistable fields...
+            this.Version(x => x.PersistenceVersion).Column("Ver");
+
+            ////// Map the IChangeAudited fields...
+            ////this.Map(x => x.CreatedBy);
+            ////this.Map(x => x.CreatedOn);
+            ////this.Map(x => x.UpdatedBy);
+            ////this.Map(x => x.UpdatedOn);
+
+            // Map the class fields...
+            this.Map(x => x.Key).Column("DomainId");
         }
 
-		#endregion
-	}
+        /// <summary>
+        /// Gets the name of the schema.
+        /// </summary>
+        public string SchemaName
+        {
+            get
+            {
+                return "dbo";
+            }
+        }
+    }
 }
