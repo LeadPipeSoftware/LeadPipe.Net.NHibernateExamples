@@ -60,3 +60,6 @@ release/
 
 # visual studio database projects
 *.dbmdl
+
+# Lib Files
+lib/
