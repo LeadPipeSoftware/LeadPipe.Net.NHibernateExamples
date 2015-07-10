@@ -12,7 +12,7 @@ using NHibernate.Linq;
 using NUnit.Framework;
 using StructureMap;
 
-namespace LeadPipe.Net.NHibernateExamples.Application
+namespace LeadPipe.Net.NHibernateExamples.Application.AntiPatterns
 {
 	/// <summary>
 	/// Demonstrates dealing with duplicated business rules with specifications.

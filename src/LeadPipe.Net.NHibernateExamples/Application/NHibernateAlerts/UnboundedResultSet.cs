@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LargeNumberOfIndividualWrites.cs" company="Lead Pipe Software">
+// <copyright file="UnboundedResultSet.cs" company="Lead Pipe Software">
 //   Copyright (c) Lead Pipe Software All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -13,29 +13,28 @@ using NHibernate.Linq;
 using NUnit.Framework;
 using StructureMap;
 
-namespace LeadPipe.Net.NHibernateExamples.Application
+namespace LeadPipe.Net.NHibernateExamples.Application.NHibernateAlerts
 {
 	/// <summary>
-	/// Demonstrates the Large Number of Individual Writes alert.
+	/// Demonstrates the Unbounded Result Set alert and shows how to deal with them.
 	/// </summary>
 	[TestFixture]
-	public class LargeNumberOfIndividualWrites
+	public class UnboundedResultSet
 	{
         /*
-         * http://hibernatingrhinos.com/Products/NHProf/learn/Alert/LargeNumberOfWrites
+         * http://hibernatingrhinos.com/Products/NHProf/learn/Alert/UnboundedResultSet
          * 
-         * This warning is raised when the profiler detects that you are writing a lot of data to
-         * the database. Similar to the warning about too many calls to the database, the main
-         * issue here is the number of remote calls and the time they take.
+         * An unbounded result set is where a query is performed and does not explicitly limit the
+         * number of returned results using SetMaxResults() with NHibernate, or TOP or LIMIT
+         * clauses in the SQL. Usually, this means that the application assumes that a query will
+         * always return only a few records. That works well in development and in testing, but it
+         * is a time bomb waiting to explode in production.
          * 
-         * We can batch together several queries using NHibernate's support for MultiQuery and
-         * MultiCriteria, but a relatively unknown feature for NHibernate is the ability to batch a
-         * set of write statements into a single database call.
-         * 
-         * This is controlled using the adonet.batch_size setting in the configuration. If you set
-         * it to a number larger than zero, you can immediately start benefiting from reduced
-         * number of database calls. You can even set this value at runtime, using
-         * session.SetBatchSize().
+         * The query may suddenly start returning thousands upon thousands of rows, and in some
+         * cases, it may return millions of rows. This leads to more load on the database server,
+         * the application server, and the network. In many cases, it can grind the entire system
+         * to a halt, usually ending with the application servers crashing with out of memory
+         * errors.
          */
 
         private readonly DataCommandProvider dataCommandProvider;
@@ -43,7 +42,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 	    
         private string blogName;
 
-        public LargeNumberOfIndividualWrites()
+        public UnboundedResultSet()
 	    {
             Bootstrapper.Start();
 
@@ -52,7 +51,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 	    }
        
         /// <summary>
-        /// Demonstrates a large number of individual writes.
+        /// Demonstrates an unbounded result set.
         /// </summary>
         [Test]
         public void Problem()
@@ -95,27 +94,16 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         }
 
         /// <summary>
-        /// Demonstrates using batches to reduce the number of individual writes.
+        /// Demonstrates using Take to create a bounded result set.
         /// </summary>
         [Test]
-        public void UsingBatchSize()
+        public void UsingTake()
         {
             var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork();
 
             using (unitOfWork.Start())
-            {                
+            {
                 var blogs = BlogMother.CreateBlogsWithPostsAndComments(50);
-
-                var batchSize = blogs.Count;
-
-                foreach (var blog in blogs)
-                {
-                    batchSize += blog.Posts.Sum(post => post.Comments.Count());
-
-                    batchSize += blog.Posts.Count();
-                }
-
-                this.dataCommandProvider.Session.SetBatchSize(batchSize);
 
                 foreach (var blog in blogs)
                 {

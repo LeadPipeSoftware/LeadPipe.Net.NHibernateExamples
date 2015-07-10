@@ -14,7 +14,7 @@ using NHibernate.Linq;
 using NUnit.Framework;
 using StructureMap;
 
-namespace LeadPipe.Net.NHibernateExamples.Application
+namespace LeadPipe.Net.NHibernateExamples.Application.NHibernateAlerts
 {
     /// <summary>
     /// Demonstrates the More Than One Session Per Request alert.
@@ -205,7 +205,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 
                 Console.WriteLine("The blog has {0} posts.".FormattedWith(blog.Posts.Count()));
 
-                //unitOfWork.Commit();
+                unitOfWork.Commit();
             }
         }
     }

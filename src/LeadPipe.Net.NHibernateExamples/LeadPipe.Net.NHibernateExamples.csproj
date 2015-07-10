@@ -119,16 +119,17 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Application\AntiPatterns\AnemicDomainModel.cs" />
+    <Compile Include="Application\AntiPatterns\DuplicatedBusinessRules.cs" />
+    <Compile Include="Application\AntiPatterns\DuplicatedCommonQueries.cs" />
+    <Compile Include="Application\CompositeKeys\CompositeDatabaseKeys.cs" />
     <Compile Include="Application\FooBarMother.cs" />
     <Compile Include="Application\BlogMother.cs" />
-    <Compile Include="Application\DuplicatedBusinessRules.cs" />
-    <Compile Include="Application\DuplicatedCommonQueries.cs" />
-    <Compile Include="Application\AnemicDomainModel.cs" />
-    <Compile Include="Application\LargeNumberOfIndividualWrites.cs" />
-    <Compile Include="Application\CompositeDatabaseKeys.cs" />
-    <Compile Include="Application\UnboundedResultSet.cs" />
-    <Compile Include="Application\TransactionDisposedWithoutExplicitRollbackCommit.cs" />
-    <Compile Include="Application\MoreThanOneSessionPerRequest.cs" />
+    <Compile Include="Application\NHibernateAlerts\LargeNumberOfIndividualWrites.cs" />
+    <Compile Include="Application\NHibernateAlerts\MoreThanOneSessionPerRequest.cs" />
+    <Compile Include="Application\NHibernateAlerts\SelectNPlusOne.cs" />
+    <Compile Include="Application\NHibernateAlerts\TransactionDisposedWithoutExplicitRollbackCommit.cs" />
+    <Compile Include="Application\NHibernateAlerts\UnboundedResultSet.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Data\Maps\BarMap.cs" />
     <Compile Include="Data\Maps\FooBarMap.cs" />
@@ -148,7 +149,6 @@
     <Compile Include="Domain\Comment.cs" />
     <Compile Include="Domain\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Application\SelectNPlusOne.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

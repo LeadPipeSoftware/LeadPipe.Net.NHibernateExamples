@@ -15,7 +15,7 @@ using NHibernate.Util;
 using NUnit.Framework;
 using StructureMap;
 
-namespace LeadPipe.Net.NHibernateExamples.Application
+namespace LeadPipe.Net.NHibernateExamples.Application.CompositeKeys
 {
 	/// <summary>
 	/// Demonstrates the issue with composite database keys and the first level id map.
@@ -23,9 +23,6 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 	[TestFixture]
 	public class CompositeDatabaseKeys
 	{
-        /*
-         */
-
 	    private readonly DataCommandProvider dataCommandProvider;
 	    private readonly IUnitOfWorkFactory unitOfWorkFactory;
 	    

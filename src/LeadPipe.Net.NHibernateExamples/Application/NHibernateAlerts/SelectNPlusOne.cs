@@ -14,7 +14,7 @@ using NHibernate.Linq;
 using NUnit.Framework;
 using StructureMap;
 
-namespace LeadPipe.Net.NHibernateExamples.Application
+namespace LeadPipe.Net.NHibernateExamples.Application.NHibernateAlerts
 {
 	/// <summary>
 	/// Demonstrates the Select N+1 alert and how to deal with them.
