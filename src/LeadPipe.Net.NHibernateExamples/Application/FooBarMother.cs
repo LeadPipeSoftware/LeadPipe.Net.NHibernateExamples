@@ -26,7 +26,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
 
             for (var i = 0; i < numberOfFoos; i++)
             {
-                var foo = new Foo(RandomValueProvider.RandomString(10, false));
+                var foo = new Foo(RandomValueProvider.RandomInteger(1, 100), RandomValueProvider.RandomInteger(1,100), RandomValueProvider.RandomString(10, false));
 
                 foos.Add(foo);
             }

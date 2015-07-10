@@ -149,6 +149,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         /// Demonstrates using ThenFetchMany to reduce N+1 problems.
         /// </summary>
         [Test]
+        [ExpectedException]
         public void UsingThenFetchMany()
         {
             /*

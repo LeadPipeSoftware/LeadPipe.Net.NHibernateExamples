@@ -18,14 +18,16 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 
 	    #region Constructors and Destructors
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Foo"/> class.
-		/// </summary>
-		/// <param name="name">
-		/// The name.
-		/// </param>
-		public Foo(string name)
-		{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Foo" /> class.
+        /// </summary>
+        /// <param name="idPartA">The identifier part a.</param>
+        /// <param name="idPartB">The identifier part b.</param>
+        /// <param name="name">The name.</param>
+		public Foo(int idPartA, int idPartB, string name)
+        {
+            this.IdPartA = idPartA;
+            this.IdPartB = idPartB;
 			this.Name = name;
 		}
 
@@ -39,6 +41,22 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 		#endregion
 
 		#region Public Properties
+
+        /// <summary>
+        /// Gets or sets the identifier part a.
+        /// </summary>
+        /// <value>
+        /// The identifier part a.
+        /// </value>
+        public virtual int IdPartA { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the identifier part b.
+        /// </summary>
+        /// <value>
+        /// The identifier part b.
+        /// </value>
+        public virtual int IdPartB { get; protected set; }
 
         /// <summary>
         /// Gets or sets the key.

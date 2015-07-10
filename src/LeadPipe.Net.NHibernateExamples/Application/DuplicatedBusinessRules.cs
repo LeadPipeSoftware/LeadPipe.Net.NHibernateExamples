@@ -154,6 +154,7 @@ namespace LeadPipe.Net.NHibernateExamples.Application
         /// Demonstrates using specifications to query and using ToFuture with a non-persisted property.
         /// </summary>
         [Test]
+        [ExpectedException]
         public void UsingSpecificationsToQueryAndFetchManyWithNonPersistedProperty()
         {
             /*

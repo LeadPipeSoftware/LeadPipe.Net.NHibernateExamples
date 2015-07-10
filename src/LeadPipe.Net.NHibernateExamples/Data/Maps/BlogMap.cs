@@ -40,6 +40,7 @@ namespace LeadPipe.Net.NHibernateExamples.Data.Maps
 
             // Map the class fields...
             this.Map(x => x.Key).Column("DomainId");
+            this.Map(x => x.IsActive);
 
             // Map the collections...
             this.HasMany(x => x.Posts)

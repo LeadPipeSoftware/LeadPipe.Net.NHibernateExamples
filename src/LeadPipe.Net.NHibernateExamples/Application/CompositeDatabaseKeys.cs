@@ -54,22 +54,48 @@ namespace LeadPipe.Net.NHibernateExamples.Application
                 bars.ForEach(bar => this.dataCommandProvider.Save(bar));
 
                 var fooBars = FooBarMother.CreateFooBars(foos, bars);
-                fooBars.ForEach(fooBar => this.dataCommandProvider.Save(fooBar));
-                
-                ////var blog = this.dataCommandProvider.Session
-                ////    .Query<Blog>()
-                ////    .FirstOrDefault(x => x.Name == this.blogName);
+                fooBars.ForEach(fb => this.dataCommandProvider.Save(fb));
 
-                ////foreach (var post in blog.Posts)
-                ////{
-                ////    foreach (var comment in post.Comments)
-                ////    {
-                ////        Console.WriteLine("{0} said {1}".FormattedWith(comment.Commenter, comment.Text));
-                ////    }
-                ////}
+                var fooIdPartA = foos.First().IdPartA;
+                var fooIdPartB = foos.First().IdPartB;
+                var barSid = bars.First().Sid;
+
+                var fooBar = this.dataCommandProvider.Session
+                    .Query<FooBar>()
+                    .Where(fb => fb.Foo.IdPartA.Equals(fooIdPartA) && fb.Foo.IdPartB.Equals(fooIdPartB) && fb.Bar.Sid.Equals(barSid))
+                    .FirstOrDefault();
+
+                Console.WriteLine("The FooBar name is {0}.".FormattedWith(fooBar.Name));
+
+                this.ParentMethod(fooIdPartA, fooIdPartB, barSid);
 
                 unitOfWork.Commit();
 			}
 		}
+
+        /// <summary>
+        /// Parent test method that calls the next method inside the UoW scope.
+        /// </summary>
+        /// <param name="fooIdPartA">The foo identifier part a.</param>
+        /// <param name="fooIdPartB">The foo identifier part b.</param>
+        /// <param name="barSid">The bar sid.</param>
+        private void ParentMethod(int fooIdPartA, int fooIdPartB, Guid barSid)
+        {
+            var unitOfWork = unitOfWorkFactory.CreateUnitOfWork();
+
+            using (unitOfWork.Start())
+            {
+                var fooBar = this.dataCommandProvider.Session
+                    .Query<FooBar>()
+                    .Where(fb => fb.Foo.IdPartA.Equals(fooIdPartA) && fb.Foo.IdPartB.Equals(fooIdPartB) && fb.Bar.Sid.Equals(barSid))
+                    .FirstOrDefault();
+
+                fooBar.MutableProperty = !fooBar.MutableProperty;
+
+                this.dataCommandProvider.Save(fooBar);
+
+                unitOfWork.Commit();
+            }
+        }
 	}
 }

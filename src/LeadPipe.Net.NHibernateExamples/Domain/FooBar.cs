@@ -32,6 +32,17 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 		}
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="FooBar"/> class.
+        /// </summary>
+        protected FooBar()
+        {
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
         /// Gets or sets the bar.
         /// </summary>
         /// <value>
@@ -46,17 +57,6 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
         /// The foo.
         /// </value>
 	    public virtual Foo Foo { get; set; }
-
-	    /// <summary>
-		/// Initializes a new instance of the <see cref="FooBar"/> class.
-		/// </summary>
-        protected FooBar()
-		{
-		}
-
-		#endregion
-
-		#region Public Properties
 
         /// <summary>
         /// Gets or sets the key.
@@ -82,6 +82,68 @@ namespace LeadPipe.Net.NHibernateExamples.Domain
 		/// </summary>
 		public virtual string Name { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a mutable property.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if true; otherwise, <c>false</c>.
+        /// </value>
+        public virtual bool MutableProperty { get; set; }
+
 	    #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Equalses the specified other.
+        /// </summary>
+        /// <param name="other">The other.</param>
+        /// <returns></returns>
+        public virtual bool Equals(FooBar other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+
+            if (ReferenceEquals(this, other)) return true;
+            
+            return Equals(Foo, other.Foo) && Equals(Bar, other.Bar);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+
+            if (ReferenceEquals(this, obj)) return true;
+
+            if (obj.GetType() != this.GetType()) return false;
+
+            return Equals((FooBar)obj);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = (Foo != null ? Foo.GetHashCode() : 0);
+
+                hashCode = (hashCode * 397) ^ Bar.GetHashCode();
+
+                return hashCode;
+            }
+        }
+
+        #endregion
     }
 }

@@ -22,7 +22,7 @@ namespace LeadPipe.Net.NHibernateExamples.Data.Maps
 
             // Set the composite id...
             this.CompositeId()
-                .KeyReference(x => x.Foo)
+                .KeyReference(x => x.Foo, "IdPartA", "IdPartB")
                 .KeyReference(x => x.Bar);
 
             // Set the natural id...
@@ -42,6 +42,7 @@ namespace LeadPipe.Net.NHibernateExamples.Data.Maps
 
             // Map the class fields...
             this.Map(x => x.Key).Column("DomainId");
+            this.Map(x => x.MutableProperty);
         }
 
         /// <summary>
